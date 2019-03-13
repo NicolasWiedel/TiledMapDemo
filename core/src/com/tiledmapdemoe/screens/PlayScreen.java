@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.tiledmapdemoe.Player;
 
 /**
  * Created by Nicolas Wiedel on 10.03.2019.
@@ -18,12 +21,16 @@ public class PlayScreen implements Screen {
     private TmxMapLoader loader = new TmxMapLoader();
     private OrthographicCamera camera;
 
+    private Player player;
+
     @Override
     public void show() {
         map = loader.load("maps/town.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
+
+        player = new Player(new Sprite(new Texture("still2.png")));
     }
 
     @Override
@@ -33,6 +40,10 @@ public class PlayScreen implements Screen {
 
         renderer.setView(camera);
         renderer.render();
+
+        renderer.getBatch().begin();
+        player.draw(renderer.getBatch());
+        renderer.getBatch().end();
     }
 
     @Override
@@ -61,5 +72,6 @@ public class PlayScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        player.getTexture().dispose();
     }
 }
